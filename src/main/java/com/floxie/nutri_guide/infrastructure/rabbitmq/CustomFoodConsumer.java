@@ -15,7 +15,7 @@ public class CustomFoodConsumer {
 
   private final CustomFoodService customFoodService;
 
-  @RabbitListener(queues = RabbitMqUserQueues.CUSTOM_FOOD_USER_DELETION)
+  @RabbitListener(queues = RabbitMqUserQueues.USER_DELETION_NOTIFY_CUSTOM_FOOD)
   public void receiveMessage(String message) {
     UUID uuid = UUID.fromString(message);
 

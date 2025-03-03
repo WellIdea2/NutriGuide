@@ -33,7 +33,7 @@
     <dependency>
       <groupId>com.github.WellIdea2</groupId>
       <artifactId>Commons</artifactId>
-      <version>-SNAPSHOT</version>
+      <version>b6d2c45602</version>
     </dependency>
 
     <dependency>

@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.commons.feature.user.dto.UserView;
-import org.commons.feature.user.enums.UserRole;
 import com.floxie.nutri_guide.features.meal.entity.Meal;
+import org.commons.feature.user.enums.UserRole;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 

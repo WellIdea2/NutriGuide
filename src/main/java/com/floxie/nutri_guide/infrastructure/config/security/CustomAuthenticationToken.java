@@ -1,6 +1,7 @@
 package com.floxie.nutri_guide.infrastructure.config.security;
 
 import java.util.Collection;
+
 import org.commons.feature.user.dto.UserView;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +10,8 @@ public class CustomAuthenticationToken extends AbstractAuthenticationToken {
 
   private final UserView principal;
 
-  public CustomAuthenticationToken(UserView principal, Collection<? extends GrantedAuthority> authorities) {
+  public CustomAuthenticationToken(
+      UserView principal, Collection<? extends GrantedAuthority> authorities) {
     super(authorities);
     this.principal = principal;
     setAuthenticated(true);

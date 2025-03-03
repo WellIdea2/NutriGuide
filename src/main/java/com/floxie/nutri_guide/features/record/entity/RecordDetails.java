@@ -16,8 +16,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.commons.feature.user.enums.Gender;
-import org.commons.feature.user.enums.WorkoutState;
+import org.commons.feature.user_details.dto.UserDetailsView;
+import org.commons.feature.user_details.enums.Gender;
+import org.commons.feature.user_details.enums.WorkoutState;
 
 @Getter
 @Setter
@@ -26,8 +27,16 @@ import org.commons.feature.user.enums.WorkoutState;
 @ToString(exclude = {"record"})
 @EqualsAndHashCode(exclude = {"record"})
 @Entity
-@Table(name = "user_details")
-public class UserDetails {
+@Table(name = "record_details")
+public class RecordDetails {
+
+  public RecordDetails (UserDetailsView userDetails){
+    setGender(userDetails.gender());
+    setWorkoutState(userDetails.workoutState());
+    setAge(userDetails.age());
+    setHeight(userDetails.height());
+    setKilograms(userDetails.kilograms());
+  }
 
   @Id
   @Column(name = "record_id", columnDefinition = "BINARY(16)")

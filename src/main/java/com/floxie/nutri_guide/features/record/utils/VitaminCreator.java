@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import com.floxie.nutri_guide.features.shared.enums.AllowedNutrients;
 import com.floxie.nutri_guide.features.shared.dto.NutritionIntakeView;
-import org.commons.feature.user.enums.Gender;
+import org.commons.feature.user_details.enums.Gender;
 
 public class VitaminCreator {
 
@@ -31,7 +31,7 @@ public class VitaminCreator {
       );
 
   public static Map<String, NutritionIntakeView> fillVitamins(Map<String, NutritionIntakeView> map,
-      Gender gender, Integer age) {
+                                                              Gender gender, Integer age) {
     fillVitaminA(map, gender, age);
     fillVitaminC(map, gender, age);
     fillVitaminD(map, gender, age);

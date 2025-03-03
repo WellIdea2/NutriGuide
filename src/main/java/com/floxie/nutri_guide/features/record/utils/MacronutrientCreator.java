@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import com.floxie.nutri_guide.features.shared.enums.AllowedNutrients;
 import com.floxie.nutri_guide.features.shared.dto.NutritionIntakeView;
-import org.commons.feature.user.enums.Gender;
+import org.commons.feature.user_details.enums.Gender;
 
 public class MacronutrientCreator {
 

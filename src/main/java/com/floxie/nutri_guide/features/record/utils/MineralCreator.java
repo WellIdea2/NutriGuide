@@ -1,11 +1,11 @@
 package com.floxie.nutri_guide.features.record.utils;
 
+import com.floxie.nutri_guide.features.shared.dto.NutritionIntakeView;
+import com.floxie.nutri_guide.features.shared.enums.AllowedNutrients;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
-import com.floxie.nutri_guide.features.shared.enums.AllowedNutrients;
-import com.floxie.nutri_guide.features.shared.dto.NutritionIntakeView;
-import org.commons.feature.user.enums.Gender;
+import org.commons.feature.user_details.enums.Gender;
 
 public class MineralCreator {
   /*
@@ -32,7 +32,7 @@ public class MineralCreator {
       );
 
   public static Map<String, NutritionIntakeView> fillMinerals(Map<String, NutritionIntakeView> map,
-      Gender gender, Integer age) {
+                                                              Gender gender, Integer age) {
     fillCalcium(map, gender, age);
     fillChromium(map, gender, age);
     fillCopper(map, gender, age);

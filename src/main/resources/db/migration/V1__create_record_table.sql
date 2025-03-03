@@ -6,7 +6,7 @@ CREATE TABLE records
     date    DATE   NOT NULL
 );
 
-CREATE TABLE user_details
+CREATE TABLE record_details
 (
     record_id     BINARY(16)   NOT NULL PRIMARY KEY,
     kilograms     DOUBLE       NOT NULL,

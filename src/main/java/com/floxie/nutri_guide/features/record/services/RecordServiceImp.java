@@ -2,17 +2,20 @@ package com.floxie.nutri_guide.features.record.services;
 
 import static com.floxie.nutri_guide.infrastructure.exception.ExceptionMessages.RECORD_NOT_FOUND;
 
-import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import org.commons.exceptions.throwable.NotFoundException;
 import com.floxie.nutri_guide.features.record.dto.RecordCreateRequest;
 import com.floxie.nutri_guide.features.record.dto.RecordUpdateReqeust;
 import com.floxie.nutri_guide.features.record.dto.RecordView;
 import com.floxie.nutri_guide.features.record.entity.Record;
+import com.floxie.nutri_guide.features.record.entity.RecordDetails;
 import com.floxie.nutri_guide.features.record.repository.RecordRepository;
 import com.floxie.nutri_guide.features.record.repository.RecordSpecification;
+import com.floxie.nutri_guide.infrastructure.config.openfeign.UserDetailsClient;
 import com.floxie.nutri_guide.infrastructure.config.security.SecurityUtils;
 import com.floxie.nutri_guide.infrastructure.mappers.RecordMapper;
+import java.time.LocalDate;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.commons.exceptions.throwable.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,12 +27,12 @@ public class RecordServiceImp implements RecordService {
 
   private final RecordMapper recordMapper;
   private final RecordRepository repository;
+  private final UserDetailsClient userDetailsClient;
 
   public Page<RecordView> getAll(Pageable pageable) {
     var user = SecurityUtils.getCurrentLoggedInUser();
 
-    return repository.findAll(new RecordSpecification(user), pageable)
-        .map(recordMapper::toView);
+    return repository.findAll(new RecordSpecification(user), pageable).map(recordMapper::toView);
   }
 
   public RecordView getById(UUID recordId) {
@@ -37,13 +40,22 @@ public class RecordServiceImp implements RecordService {
   }
 
   public RecordView create(RecordCreateRequest dto) {
-    var user = SecurityUtils.getCurrentLoggedInUser();
+    var loggedInUser = SecurityUtils.getCurrentLoggedInUser();
+    var date = dto.date() != null ? dto.date() : LocalDate.now();
 
-    if (repository.existsByDateAndUserId(dto.date(), user.id())) {
-      return recordMapper.toView(repository.findByDateAndUserId(dto.date(), user.id()));
+    if (repository.existsByDateAndUserId(date, loggedInUser.id())) {
+      return recordMapper.toView(repository.findByDateAndUserId(date, loggedInUser.id()));
     }
 
-    var record = recordMapper.toEntity(dto, user);
+    var record = recordMapper.toEntity(dto);
+    var userDetails = userDetailsClient.getUserDetails();
+    var recordDetails = new RecordDetails(userDetails);
+    recordDetails.setRecord(record);
+
+    record.setUserId(loggedInUser.id());
+    record.setRecordDetails(recordDetails);
+    record.setDate(date);
+    record.setDailyCalories(record.getCaloriesPerDay());
 
     return recordMapper.toView(repository.save(record));
   }
@@ -59,19 +71,21 @@ public class RecordServiceImp implements RecordService {
   @Transactional
   public void delete(UUID recordId) {
     if (!repository.existsById(recordId)) {
-      throw new NotFoundException(RECORD_NOT_FOUND , recordId);
+      throw new NotFoundException(RECORD_NOT_FOUND, recordId);
     }
 
     repository.deleteById(recordId);
   }
 
   public Record findByIdAndUserId(UUID recordId, UUID userId) {
-    return repository.findByIdAndUserId(recordId, userId)
-        .orElseThrow(() -> new NotFoundException(RECORD_NOT_FOUND , recordId));
+    return repository
+        .findByIdAndUserId(recordId, userId)
+        .orElseThrow(() -> new NotFoundException(RECORD_NOT_FOUND, recordId));
   }
 
   public Record findById(UUID recordId) {
-    return repository.findById(recordId)
+    return repository
+        .findById(recordId)
         .orElseThrow(() -> new NotFoundException(RECORD_NOT_FOUND, recordId));
   }
 
